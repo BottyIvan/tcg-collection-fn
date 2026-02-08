@@ -33,7 +33,7 @@ setGlobalOptions({ maxInstances: 10 });
  * @param {Request} request The HTTP request object
  * @param {Response} response The HTTP response object
  */
-export const helloWorld = onRequest((request, response) => {
+export const helloWorld = onRequest({ cors: true }, (_request, response) => {
   logger.info("Hello logs!", { structuredData: true });
   response.send("Hello from Firebase!");
 });
@@ -43,16 +43,19 @@ export const helloWorld = onRequest((request, response) => {
  * @param {Request} request The HTTP request object
  * @param {Response} response The HTTP response object
  */
-export const brandList = onRequest(async (request, response) => {
-  // Calling the API client to fetch the brand list
-  try {
-    const brandList = await ApiTcg.getBrandList();
-    response.json(brandList);
-  } catch (error) {
-    logger.error("Error fetching brand list:", error);
-    response.status(500).send("Error fetching brand list");
-  }
-});
+export const brandList = onRequest(
+  { cors: true },
+  async (request, response) => {
+    // Calling the API client to fetch the brand list
+    try {
+      const brandList = await ApiTcg.getBrandList();
+      response.json(brandList);
+    } catch (error) {
+      logger.error("Error fetching brand list:", error);
+      response.status(500).send("Error fetching brand list");
+    }
+  },
+);
 
 /**
  * HTTP function to fetch the card list based on the brand and query parameters
@@ -60,7 +63,10 @@ export const brandList = onRequest(async (request, response) => {
  * @param {Response} response The HTTP response object
  */
 export const cardList = onRequest(
-  { secrets: ["TCG_SERVICE_BASE_URL", "TCG_SERVICE_API_KEY"] },
+  {
+    cors: true,
+    secrets: ["TCG_SERVICE_BASE_URL", "TCG_SERVICE_API_KEY"],
+  },
   async (request, response) => {
     const { brand, ...query } = request.body;
 

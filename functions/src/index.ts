@@ -10,8 +10,11 @@
 import { setGlobalOptions } from "firebase-functions";
 import { onRequest } from "firebase-functions/https";
 import * as logger from "firebase-functions/logger";
+import * as cors from "cors";
 import { ApiTcg } from "./Services/apitcg";
 import { Brand } from "./enum/brand";
+
+const corsHandler = cors({ origin: true });
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
@@ -34,8 +37,10 @@ setGlobalOptions({ maxInstances: 10 });
  * @param {Response} response The HTTP response object
  */
 export const helloWorld = onRequest((request, response) => {
-  logger.info("Hello logs!", { structuredData: true });
-  response.send("Hello from Firebase!");
+  corsHandler(request, response, () => {
+    logger.info("Hello logs!", { structuredData: true });
+    response.send("Hello from Firebase!");
+  });
 });
 
 /**
@@ -44,14 +49,16 @@ export const helloWorld = onRequest((request, response) => {
  * @param {Response} response The HTTP response object
  */
 export const brandList = onRequest(async (request, response) => {
-  // Calling the API client to fetch the brand list
-  try {
-    const brandList = await ApiTcg.getBrandList();
-    response.json(brandList);
-  } catch (error) {
-    logger.error("Error fetching brand list:", error);
-    response.status(500).send("Error fetching brand list");
-  }
+  corsHandler(request, response, async () => {
+    // Calling the API client to fetch the brand list
+    try {
+      const brandList = await ApiTcg.getBrandList();
+      response.json(brandList);
+    } catch (error) {
+      logger.error("Error fetching brand list:", error);
+      response.status(500).send("Error fetching brand list");
+    }
+  });
 });
 
 /**
@@ -62,33 +69,35 @@ export const brandList = onRequest(async (request, response) => {
 export const cardList = onRequest(
   { secrets: ["TCG_SERVICE_BASE_URL", "TCG_SERVICE_API_KEY"] },
   async (request, response) => {
-    const { brand, ...query } = request.body;
+    corsHandler(request, response, async () => {
+      const { brand, ...query } = request.body;
 
-    if (!brand) {
-      response.status(400).send("Brand is required");
-      return;
-    }
-    if (!Object.values(Brand).includes(brand as Brand)) {
-      response.status(400).send("Invalid brand");
-      return;
-    }
+      if (!brand) {
+        response.status(400).send("Brand is required");
+        return;
+      }
+      if (!Object.values(Brand).includes(brand as Brand)) {
+        response.status(400).send("Invalid brand");
+        return;
+      }
 
-    if (Object.keys(query).length === 0) {
-      response.status(400).send("Query parameters are required");
-      return;
-    }
+      if (Object.keys(query).length === 0) {
+        response.status(400).send("Query parameters are required");
+        return;
+      }
 
-    // Calling the API client to fetch the card list
-    try {
-      const apiClient = new ApiTcg();
-      const cardList = await apiClient.getCardList(
-        brand as Brand,
-        query as Record<string, string>,
-      );
-      response.json(cardList);
-    } catch (error) {
-      logger.error("Error fetching card list:", error);
-      response.status(500).send("Error fetching card list");
-    }
+      // Calling the API client to fetch the card list
+      try {
+        const apiClient = new ApiTcg();
+        const cardList = await apiClient.getCardList(
+          brand as Brand,
+          query as Record<string, string>,
+        );
+        response.json(cardList);
+      } catch (error) {
+        logger.error("Error fetching card list:", error);
+        response.status(500).send("Error fetching card list");
+      }
+    });
   },
 );

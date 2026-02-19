@@ -11,6 +11,10 @@ import { setGlobalOptions } from "firebase-functions";
 import { onRequest } from "firebase-functions/https";
 import * as logger from "firebase-functions/logger";
 import { ApiTcg } from "./services/apitcg";
+import {
+  CardListRequestData,
+  CardListSchema,
+} from "./requests/card-list-request";
 import { Brand } from "./enum/brand";
 
 // Start writing functions
@@ -68,29 +72,15 @@ export const cardList = onRequest(
     secrets: ["TCG_SERVICE_BASE_URL", "TCG_SERVICE_API_KEY"],
   },
   async (request, response) => {
-    const { brand, ...query } = request.body;
-
-    if (!brand) {
-      response.status(400).send("Brand is required");
-      return;
-    }
-    if (!Object.values(Brand).includes(brand as Brand)) {
-      response.status(400).send("Invalid brand");
-      return;
-    }
-
-    if (Object.keys(query).length === 0) {
-      response.status(400).send("Query parameters are required");
-      return;
-    }
+    // Validating the request body against the CardListSchema
+    const parsed: CardListRequestData = CardListSchema.parse(request.body);
 
     // Calling the API client to fetch the card list
     try {
       const apiClient = new ApiTcg();
-      const cardList = await apiClient.getCardList(
-        brand as Brand,
-        query as Record<string, string>,
-      );
+      const cardList = await apiClient.getCardList(parsed.brand as Brand, {
+        name: parsed.name as string,
+      });
       response.json(cardList);
     } catch (error) {
       logger.error("Error fetching card list:", error);

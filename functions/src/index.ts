@@ -10,6 +10,7 @@
 import { setGlobalOptions } from "firebase-functions";
 import { onRequest } from "firebase-functions/https";
 import * as logger from "firebase-functions/logger";
+import { ZodError } from "zod";
 import { ApiTcg } from "./services/apitcg";
 import {
   CardListRequestData,
@@ -73,7 +74,19 @@ export const cardList = onRequest(
   },
   async (request, response) => {
     // Validating the request body against the CardListSchema
-    const parsed: CardListRequestData = CardListSchema.parse(request.body);
+    let parsed: CardListRequestData;
+    try {
+      parsed = CardListSchema.parse(request.body);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        logger.error("Validation error:", error);
+        response.status(400).json({ error: error.issues });
+        return;
+      }
+      logger.error("Unexpected error during validation:", error);
+      response.status(500).send("Unexpected error during validation");
+      return;
+    }
 
     // Calling the API client to fetch the card list
     try {

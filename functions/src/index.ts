@@ -10,7 +10,7 @@
 import { setGlobalOptions } from "firebase-functions";
 import { onRequest } from "firebase-functions/https";
 import * as logger from "firebase-functions/logger";
-import { ApiTcg } from "./Services/apitcg";
+import { ApiTcg } from "./services/apitcg";
 import { Brand } from "./enum/brand";
 
 // Start writing functions

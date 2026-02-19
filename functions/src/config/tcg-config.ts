@@ -1,5 +1,24 @@
 import { Brand } from "../enum/brand";
 import { TcgConfig } from "../interface/tcg-config";
+
+/**
+ * TCG data source configuration mapping brands to repository details.
+ *
+ * Used by GitHubService to construct URLs for fetching sets and cards data.
+ * Each brand configuration includes:
+ * - repo: Repository name
+ * - baseUrl: Raw GitHub content URL
+ * - setsPath: Path to sets data file
+ * - cardsPath: Function returning path for a specific set's cards
+ *
+ * @example
+ * const config = TCG_CONFIG[Brand.Pokemon];
+ * const setsUrl = new URL(config.setsPath, config.baseUrl).toString();
+ * const cardsUrl = new URL(
+ *   config.cardsPath("base-set"),
+ *   config.baseUrl
+ * ).toString();
+ */
 export const TCG_CONFIG: Record<Brand, TcgConfig> = {
   [Brand.Pokemon]: {
     repo: "pokemon-tcg-data",

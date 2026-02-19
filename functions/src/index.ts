@@ -17,6 +17,7 @@ import {
   CardListSchema,
 } from "./requests/card-list-request";
 import { Brand } from "./enum/brand";
+import { GitHubService } from "./services/github";
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
@@ -58,6 +59,31 @@ export const brandList = onRequest(
     } catch (error) {
       logger.error("Error fetching brand list:", error);
       response.status(500).send("Error fetching brand list");
+    }
+  },
+);
+
+/**
+ * HTTP function to fetch the set list based on the brand query parameter
+ * @param {Request} request The HTTP request object
+ * @param {Response} response The HTTP response object
+ */
+export const setList = onRequest(
+  {
+    cors: true,
+    secrets: ["TCG_SERVICE_BASE_URL", "TCG_SERVICE_API_KEY"],
+  },
+  async (request, response) => {
+    // TODO: Implement SetListSchema and validation logic for now
+    // keeping it simple like only Pokemon
+    const service = new GitHubService();
+    try {
+      const setsResponse = await service.getSets(Brand.Pokemon);
+      const setsData = await setsResponse.json();
+      response.json(setsData);
+    } catch (error) {
+      logger.error("Error fetching set list:", error);
+      response.status(500).send("Error fetching set list");
     }
   },
 );

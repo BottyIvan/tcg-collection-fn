@@ -11,7 +11,6 @@ export const CardListSchema = z.object({
     message: "Brand is required",
   }),
   name: z.string().nonoptional({ message: "Name is required" }),
-  rarity: z.string().nonoptional({ message: "Rarity is required" }),
 });
 
 /**

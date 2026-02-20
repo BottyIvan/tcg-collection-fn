@@ -1,11 +1,8 @@
 import { Brand } from "../enum/brand";
-import {
-  NormalizedCard,
-  AnyTCGCard,
-  PokemonCard,
-  DigimonCard,
-  DragonBallCard,
-} from "../interface/card";
+import { NormalizedCard, AnyTCGCard } from "../interface/card";
+import { PokemonCard } from "../interface/card/pokemon";
+import { DigimonCard } from "../interface/card/digimon";
+import { DragonBallCard } from "../interface/card/dragonball";
 import { PokemonCardAdapter } from "../adapters/pokemon-adapter";
 import { DigimonCardAdapter } from "../adapters/digimon-adapter";
 import { DragonBallCardAdapter } from "../adapters/dragonball-adapter";
@@ -24,26 +21,26 @@ export class CardNormalizer {
    */
   static normalize(card: AnyTCGCard, brand: Brand): NormalizedCard {
     switch (brand) {
-    case Brand.Pokemon:
-      return PokemonCardAdapter.normalize(card as PokemonCard);
+      case Brand.Pokemon:
+        return PokemonCardAdapter.normalize(card as PokemonCard);
 
-    case Brand.Digimon:
-      return DigimonCardAdapter.normalize(card as DigimonCard);
+      case Brand.Digimon:
+        return DigimonCardAdapter.normalize(card as DigimonCard);
 
-    case Brand.DragonBallFusion:
-      return DragonBallCardAdapter.normalize(card as DragonBallCard);
+      case Brand.DragonBallFusion:
+        return DragonBallCardAdapter.normalize(card as DragonBallCard);
 
-    // Add other brands as needed
-    case Brand.OnePiece:
-    case Brand.Magic:
-    case Brand.UnionArena:
-    case Brand.Gundam:
-    case Brand.Riftbound:
-    case Brand.StarWarsUnlimited:
-      throw new Error(`Brand ${brand} normalization not yet implemented`);
+      // Add other brands as needed
+      case Brand.OnePiece:
+      case Brand.Magic:
+      case Brand.UnionArena:
+      case Brand.Gundam:
+      case Brand.Riftbound:
+      case Brand.StarWarsUnlimited:
+        throw new Error(`Brand ${brand} normalization not yet implemented`);
 
-    default:
-      throw new Error(`Unknown brand: ${brand}`);
+      default:
+        throw new Error(`Unknown brand: ${brand}`);
     }
   }
 
@@ -65,28 +62,28 @@ export class CardNormalizer {
    */
   static denormalize(card: NormalizedCard): AnyTCGCard {
     switch (card.brand) {
-    case Brand.Pokemon:
-      return PokemonCardAdapter.denormalize(card);
+      case Brand.Pokemon:
+        return PokemonCardAdapter.denormalize(card);
 
-    case Brand.Digimon:
-      return DigimonCardAdapter.denormalize(card);
+      case Brand.Digimon:
+        return DigimonCardAdapter.denormalize(card);
 
-    case Brand.DragonBallFusion:
-      return DragonBallCardAdapter.denormalize(card);
+      case Brand.DragonBallFusion:
+        return DragonBallCardAdapter.denormalize(card);
 
-    // Add other brands as needed
-    case Brand.OnePiece:
-    case Brand.Magic:
-    case Brand.UnionArena:
-    case Brand.Gundam:
-    case Brand.Riftbound:
-    case Brand.StarWarsUnlimited:
-      throw new Error(
-        `Brand ${card.brand} denormalization not yet implemented`,
-      );
+      // Add other brands as needed
+      case Brand.OnePiece:
+      case Brand.Magic:
+      case Brand.UnionArena:
+      case Brand.Gundam:
+      case Brand.Riftbound:
+      case Brand.StarWarsUnlimited:
+        throw new Error(
+          `Brand ${card.brand} denormalization not yet implemented`,
+        );
 
-    default:
-      throw new Error(`Unknown brand: ${card.brand}`);
+      default:
+        throw new Error(`Unknown brand: ${card.brand}`);
     }
   }
 

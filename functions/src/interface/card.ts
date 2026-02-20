@@ -1,6 +1,6 @@
 import { Brand } from "../enum/brand";
 import { DigimonCard } from "./card/digimon";
-import { DragonBallCard } from "./card/dragon-ball";
+import { DragonBallCard } from "./card/dragonball";
 import { PokemonCard } from "./card/pokemon";
 
 /**

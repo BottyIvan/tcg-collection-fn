@@ -1,4 +1,7 @@
 import { Brand } from "../enum/brand";
+import { DigimonCard } from "./card/digimon";
+import { DragonBallCard } from "./card/dragon-ball";
+import { PokemonCard } from "./card/pokemon";
 
 /**
  * Card images structure
@@ -59,115 +62,6 @@ export interface NormalizedCard {
 
   // Original data preservation
   rawData: Record<string, unknown>;
-}
-
-/**
- * Pokemon attack structure
- */
-export interface PokemonAttack {
-  name: string;
-  cost: string[];
-  convertedEnergyCost: number;
-  damage: string;
-  text: string;
-}
-
-/**
- * Pokemon TCG specific card structure
- */
-export interface PokemonCard {
-  id: string;
-  name: string;
-  supertype: string;
-  subtypes?: string[];
-  level?: string;
-  hp?: string;
-  types?: string[];
-  evolvesFrom?: string;
-  attacks?: PokemonAttack[];
-  weaknesses?: Array<{
-    type: string;
-    value: string;
-  }>;
-  resistances?: Array<{
-    type: string;
-    value: string;
-  }>;
-  retreatCost?: string[];
-  convertedRetreatCost?: number;
-  number?: string;
-  artist?: string;
-  rarity?: string;
-  flavorText?: string;
-  nationalPokedexNumbers?: number[];
-  legalities?: Record<string, string>;
-  images: {
-    small: string;
-    large: string;
-  };
-  set?: {
-    id: string;
-    name: string;
-  };
-}
-
-/**
- * Digimon TCG specific card structure
- */
-export interface DigimonCard {
-  id: string;
-  code: string;
-  name: string;
-  level?: string;
-  colors: string[];
-  images: {
-    small: string;
-    large: string;
-  };
-  cardType: string;
-  form?: string;
-  attribute?: string;
-  type?: string;
-  dp?: string;
-  playCost?: string;
-  digivolveCost1?: string;
-  digivolveCost2?: string;
-  effect?: string;
-  inheritedEffect?: string;
-  securityEffect?: string;
-  notes?: string;
-  set: {
-    id: string;
-    name: string;
-  };
-  rarity?: string;
-}
-
-/**
- * Dragon Ball Fusion TCG specific card structure
- */
-export interface DragonBallCard {
-  id: string;
-  code: string;
-  rarity: string;
-  name: string;
-  color: string;
-  images: {
-    small: string;
-    large: string;
-  };
-  cardType: string;
-  cost?: string;
-  specifiedCost?: string;
-  power?: string;
-  comboPower?: string;
-  features?: string;
-  effect?: string;
-  getIt?: string;
-  set: {
-    id: string;
-    name: string;
-  };
 }
 
 /**

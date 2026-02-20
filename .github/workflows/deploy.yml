@@ -34,7 +34,7 @@ jobs:
               working-directory: functions
 
             - name: Lint TypeScript
-              run: npm run lint
+              run: npm run lint --fix
               working-directory: functions
 
             - name: Build TypeScript

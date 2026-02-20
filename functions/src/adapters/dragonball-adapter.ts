@@ -1,9 +1,6 @@
 import { Brand } from "../enum/brand";
-import {
-  NormalizedCard,
-  DragonBallCard,
-  CardCost,
-} from "../interface/card";
+import { NormalizedCard, CardCost } from "../interface/card";
+import { DragonBallCard } from "../interface/card/dragonball";
 
 /**
  * Adapter for normalizing Dragon Ball Fusion TCG cards

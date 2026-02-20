@@ -1,10 +1,6 @@
 import { Brand } from "../enum/brand";
-import {
-  NormalizedCard,
-  PokemonCard,
-  PokemonAttack,
-  CardCost,
-} from "../interface/card";
+import { NormalizedCard, CardCost } from "../interface/card";
+import { PokemonCard, PokemonAttack } from "../interface/card/pokemon";
 
 /**
  * Adapter for normalizing Pokemon TCG cards

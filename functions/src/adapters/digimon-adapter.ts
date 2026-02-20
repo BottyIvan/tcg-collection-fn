@@ -1,9 +1,6 @@
 import { Brand } from "../enum/brand";
-import {
-  NormalizedCard,
-  DigimonCard,
-  CardCost,
-} from "../interface/card";
+import { NormalizedCard, CardCost } from "../interface/card";
+import { DigimonCard } from "../interface/card/digimon";
 
 /**
  * Adapter for normalizing Digimon TCG cards

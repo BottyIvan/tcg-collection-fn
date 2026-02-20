@@ -127,3 +127,46 @@ export const cardList = onRequest(
     }
   },
 );
+
+export const getCardDetails = onRequest(
+  {
+    cors: true,
+    secrets: ["TCG_SERVICE_BASE_URL", "TCG_SERVICE_API_KEY"],
+  },
+  async (request, response) => {
+    const { brand, setId, name, cardId } = request.body;
+
+    // Validate required query parameters
+    const missingParams: string[] = [];
+    if (typeof brand !== "string") missingParams.push("brand");
+    if (typeof setId !== "string") missingParams.push("setId");
+    if (typeof name !== "string") missingParams.push("name");
+    if (typeof cardId !== "string") missingParams.push("cardId");
+
+    if (missingParams.length > 0) {
+      const paramsList = missingParams.join(", ");
+      const errorMessage = `Missing or invalid query parameters: ${paramsList}`;
+      logger.error(errorMessage, { received: request.query });
+      response.status(400).json({
+        error: errorMessage,
+        required: ["brand", "setId", "name", "cardId"],
+        received: request.query,
+      });
+      return;
+    }
+
+    const service = new GitHubService();
+    try {
+      const cardDetails = await service.getCardDetails(
+        brand as Brand,
+        setId as string,
+        name as string,
+        cardId as string,
+      );
+      response.json(cardDetails);
+    } catch (error) {
+      logger.error("Error fetching card details:", error);
+      response.status(500).send("Error fetching card details");
+    }
+  },
+);

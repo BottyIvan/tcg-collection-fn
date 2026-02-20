@@ -10,12 +10,6 @@
 import { setGlobalOptions } from "firebase-functions";
 import { onRequest } from "firebase-functions/https";
 import * as logger from "firebase-functions/logger";
-import { ZodError } from "zod";
-import { ApiTcg } from "./services/apitcg";
-import {
-  CardListRequestData,
-  CardListSchema,
-} from "./requests/card-list-request";
 import { Brand } from "./enum/brand";
 import { GitHubService } from "./services/github";
 
@@ -53,13 +47,7 @@ export const brandList = onRequest(
   { cors: true },
   async (request, response) => {
     // Calling the API client to fetch the brand list
-    try {
-      const brandList = await ApiTcg.getBrandList();
-      response.json(brandList);
-    } catch (error) {
-      logger.error("Error fetching brand list:", error);
-      response.status(500).send("Error fetching brand list");
-    }
+    response.json(Object.values(Brand));
   },
 );
 

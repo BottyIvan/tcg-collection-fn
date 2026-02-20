@@ -10,7 +10,7 @@
 import { setGlobalOptions } from "firebase-functions";
 import { onRequest } from "firebase-functions/https";
 import * as logger from "firebase-functions/logger";
-import { Brand } from "./enum/brand";
+import { Brand, SUPPORTED_BRANDS } from "./enum/brand";
 import { CardDetailsRequestData } from "./requests/card-details-schema-request";
 import { GitHubService } from "./services/github";
 
@@ -47,8 +47,8 @@ export const helloWorld = onRequest({ cors: true }, (_request, response) => {
 export const brandList = onRequest(
   { cors: true },
   async (request, response) => {
-    // Calling the API client to fetch the brand list
-    response.json(Object.values(Brand));
+    // Return only the currently supported brands with implemented adapters
+    response.json(SUPPORTED_BRANDS);
   },
 );
 

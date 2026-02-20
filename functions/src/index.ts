@@ -11,6 +11,7 @@ import { setGlobalOptions } from "firebase-functions";
 import { onRequest } from "firebase-functions/https";
 import * as logger from "firebase-functions/logger";
 import { Brand } from "./enum/brand";
+import { CardDetailsRequestData } from "./requests/card-details-schema-request";
 import { GitHubService } from "./services/github";
 
 // Start writing functions
@@ -57,35 +58,21 @@ export const getCardDetails = onRequest(
     secrets: ["TCG_SERVICE_BASE_URL", "TCG_SERVICE_API_KEY"],
   },
   async (request, response) => {
-    const { brand, setId, name, cardId } = request.body;
-
-    // Validate required query parameters
-    const missingParams: string[] = [];
-    if (typeof brand !== "string") missingParams.push("brand");
-    if (typeof setId !== "string") missingParams.push("setId");
-    if (typeof name !== "string") missingParams.push("name");
-    if (typeof cardId !== "string") missingParams.push("cardId");
-
-    if (missingParams.length > 0) {
-      const paramsList = missingParams.join(", ");
-      const errorMessage = `Missing or invalid query parameters: ${paramsList}`;
-      logger.error(errorMessage, { received: request.query });
-      response.status(400).json({
-        error: errorMessage,
-        required: ["brand", "setId", "name", "cardId"],
-        received: request.query,
-      });
-      return;
-    }
-
+    // Create an instance of the GitHubService to interact with the TCG service
     const service = new GitHubService();
     try {
+      // Validate and parse the request body using the CardDetailsSchema
+      const data = request.body as CardDetailsRequestData;
+
+      // Fetch the card details from the TCG service using the parsed data
       const cardDetails = await service.getCardDetails(
-        brand as Brand,
-        setId as string,
-        name as string,
-        cardId as string,
+        data.brand as Brand,
+        data.setId as string,
+        data.name as string,
+        data.cardId as string,
       );
+
+      // Respond with the fetched card details
       response.json(cardDetails);
     } catch (error) {
       logger.error("Error fetching card details:", error);

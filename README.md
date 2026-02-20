@@ -56,14 +56,15 @@ tcg-collection-fn/
 
 ### Environment Variables
 
+> [!IMPORTANT]
+> Obtain your API key from [ApiTCG](https://docs.apitcg.com/). Required for direct ApiTCG endpoint access. The service is currently under development with potentially limited functionality.
+
 Create a `.env` file in the `functions/` directory:
 
 ```env
 TCG_SERVICE_BASE_URL=https://api.apitcg.com
 TCG_SERVICE_API_KEY=your_api_key_here
 ```
-
-> **Note**: Get your API key from [ApiTCG](https://docs.apitcg.com/)
 
 ## 📦 Installation
 

@@ -10,9 +10,10 @@
 import { setGlobalOptions } from "firebase-functions";
 import { onRequest } from "firebase-functions/https";
 import * as logger from "firebase-functions/logger";
-import { Brand, SUPPORTED_BRANDS } from "./enum/brand";
+import { Brand } from "./enum/brand";
 import { CardDetailsRequestData } from "./requests/card-details-schema-request";
 import { GitHubService } from "./services/github";
+import { CardNormalizer } from "./services/card-normalizer";
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
@@ -48,7 +49,7 @@ export const brandList = onRequest(
   { cors: true },
   async (request, response) => {
     // Return only the currently supported brands with implemented adapters
-    response.json(SUPPORTED_BRANDS);
+    response.json(CardNormalizer.getSupportedBrands());
   },
 );
 

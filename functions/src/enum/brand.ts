@@ -9,12 +9,3 @@ export enum Brand {
   Riftbound = "riftbound",
   StarWarsUnlimited = "star-wars-unlimited",
 }
-
-/**
- * List of currently supported brands with implemented adapters
- */
-export const SUPPORTED_BRANDS: Brand[] = [
-  Brand.Pokemon,
-  Brand.Digimon,
-  Brand.DragonBallFusion,
-];
